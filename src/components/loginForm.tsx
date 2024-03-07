@@ -1,11 +1,13 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { login } from "../services/auth";
+import { ILoggedInState } from "../helpers/interfaces";
 
-const LoginForm = () => {
+const LoginForm: React.FC<ILoggedInState> = (props) => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-	const handleClick = () => {
-		login(username, password);
+	const handleClick = async () => {
+		const response = await login(username, password);
+		if (response.success) props.setIsLoggedIn(true);
 	};
 
 	return (

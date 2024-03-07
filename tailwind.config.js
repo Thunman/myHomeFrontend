@@ -6,6 +6,12 @@ export default {
   ],
   theme: {
     extend: {
+      height: {
+        "3/4screen": "75vh"
+      },
+      width: {
+        "3/4screen": "75vw"
+      },
       mixBlendMode: {
         difference: 'difference',
       },
