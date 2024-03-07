@@ -43,16 +43,18 @@ export const hibernatePC = async (): Promise<IResponse> => {
 
 export const getStatusOffBackend = async (): Promise<IBackendStatus> => {
 	try {
-		const response = await fetch("/api/users/status", {
+		const response = await fetch("api/users/getStatus", {
 			method: "GET",
 			credentials: "include",
 			headers: {
 				"Content-Type": "application/json",
 			},
 		});
+		if (!response.ok)
+			throw new Error(`HTTP error! status: ${response.status}`);
 		const data = await response.json();
-		if (!response.ok) throw new Error(data.message);
-		else return { success: true, mongoDB: data.mongo, mainPC: data.pc };
+		console.log("data: ", data);
+		return { success: true, mongoDB: data.mongo, mainPC: data.pc };
 	} catch (error) {
 		console.error(error);
 		return { success: false, errorMessage: `${error}` };

@@ -1,19 +1,30 @@
 import React, { useState } from "react";
 import { login } from "../services/auth";
 import { ILoggedInState } from "../helpers/interfaces";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm: React.FC<ILoggedInState> = (props) => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const navigate = useNavigate();
 	const handleClick = async () => {
+		console.log("CLICK");
 		const response = await login(username, password);
-		if (response.success) props.setIsLoggedIn(true);
+		if (response.success) {
+			props.setIsLoggedIn(true);
+			navigate("/home");
+		} else console.log(response.message);
 	};
 
 	return (
 		<div className="min-h-screen flex items-center justify-center">
 			<div className="bg-black shadow-lg rounded-lg px-8 py-6 w-80 border-2 border-neutral-800">
-				<form onSubmit={handleClick}>
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						handleClick();
+					}}
+				>
 					<div className="mb-4">
 						<input
 							value={username}

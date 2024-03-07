@@ -12,8 +12,13 @@ export const login = async (
 			},
 			body: JSON.stringify({ username, password }),
 		});
-		if (!response.ok) return { success: false, message: "error" };
-		else return { success: true, message: "Logged in" };
+		if (!response.ok) {
+			console.log(response);
+			return { success: false, message: "error" };
+		} else {
+			console.log(response);
+			return { success: true, message: "Logged in" };
+		}
 	} catch (error) {
 		console.error(error);
 		return { success: false, message: `Error ${error}` };
