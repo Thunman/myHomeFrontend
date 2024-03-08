@@ -13,16 +13,21 @@ const Home = () => {
 		const response = await hibernatePC();
 		if (response.success) {
 			alert(response.message);
-			setMainPCStatus(true);
+			setMainPCStatus(false);
 		} else alert(response.message);
 	};
 
 	const toggleDB = async () => {
 		const response = await toggleMongo();
-		if (response.success) {
+		if (response.success && response.message.includes("stopped")) {
+			alert(response.message);
+			setMongoStatus(false);
+		} else if (response.success && response.message.includes("started")) {
 			alert(response.message);
 			setMongoStatus(true);
-		} else alert(response.message);
+		} else {
+			alert(response.message);
+		}
 	};
 
 	useEffect(() => {

@@ -8,12 +8,11 @@ const LoginForm: React.FC<ILoggedInState> = (props) => {
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
 	const handleClick = async () => {
-		console.log("CLICK");
 		const response = await login(username, password);
 		if (response.success) {
 			props.setIsLoggedIn(true);
 			navigate("/home");
-		} else console.log(response.message);
+		} else alert(response.message);
 	};
 
 	return (

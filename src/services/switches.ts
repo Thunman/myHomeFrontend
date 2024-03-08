@@ -53,7 +53,6 @@ export const getStatusOffBackend = async (): Promise<IBackendStatus> => {
 		if (!response.ok)
 			throw new Error(`HTTP error! status: ${response.status}`);
 		const data = await response.json();
-		console.log("data: ", data);
 		return { success: true, mongoDB: data.mongo, mainPC: data.pc };
 	} catch (error) {
 		console.error(error);
