@@ -4,11 +4,12 @@ import {
 	hibernatePC,
 	toggleMongo,
 } from "../services/switches";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
 	const [mongoStatus, setMongoStatus] = useState(false);
 	const [mainPCStatus, setMainPCStatus] = useState(false);
-
+	const navigate = useNavigate();
 	const sleepPC = async () => {
 		const response = await hibernatePC();
 		if (response.success) {
@@ -44,7 +45,6 @@ const Home = () => {
 		};
 		getStatus();
 	}, []);
-
 	return (
 		<div className=" bg-black w-screen h-screen flex justify-center items-center">
 			<div className="h-3/4screen w-3/4screen flex flex-wrap gap-4 place-content-center">
@@ -75,7 +75,12 @@ const Home = () => {
 						<p className="text-white font-semibold">Main PC offline</p>
 					)}
 				</div>
-				<div className="bg-neutral-600 hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white"></div>
+				<div
+					onClick={() => navigate("/logs")}
+					className="bg-neutral-600 hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white"
+				>
+					<p className="text-white font-semibold">Logs</p>
+				</div>
 				<div className="bg-neutral-600 hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white"></div>
 				<div className="bg-neutral-600 hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white"></div>
 				<div className="bg-neutral-600 hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white"></div>
