@@ -13,8 +13,6 @@ export interface IAuthProvider {
 }
 
 export interface IAuthContext {
-	isValid: boolean;
-	setIsValid: (value: boolean) => void;
 	isLoggedIn: boolean;
 	setIsLoggedIn: (value: boolean) => void;
 	backendServiceProvider: (func: IBackendInteraction) => Promise<IResponse>;
@@ -25,8 +23,8 @@ export interface IAuthContext {
 	) => Promise<IResponse>;
 }
 export interface ILoginFunction {
-	(username: string, password: string): Promise<IResponse>;
+	(username: string, password: string): Promise<Response>;
 }
 export interface IBackendInteraction {
-	(): Promise<IResponse>;
+	(): Promise<Response>;
 }

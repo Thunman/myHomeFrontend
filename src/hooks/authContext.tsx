@@ -1,5 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
-import { validateToken } from "../services/auth";
+import React, { createContext, useState } from "react";
 import {
 	IAuthContext,
 	IAuthProvider,
@@ -11,8 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 export const AuthContext = createContext<IAuthContext>({
-	isValid: false,
-	setIsValid: () => {},
 	isLoggedIn: false,
 	setIsLoggedIn: () => {},
 	backendServiceProvider: async (_: IBackendInteraction) => {
@@ -25,25 +22,8 @@ export const AuthContext = createContext<IAuthContext>({
 
 export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
 	const [cookies] = useCookies(["loggedIn"]);
-	const [isValid, setIsValid] = useState(false);
 	const [isLoggedIn, setIsLoggedIn] = useState(cookies.loggedIn);
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		const checkToken = async () => {
-			const response = await validateToken();
-			setIsValid(response.success);
-		};
-
-		checkToken();
-	}, []);
-
-	useEffect(() => {
-		if (!isValid) {
-			navigate("/");
-			setIsLoggedIn(false);
-		}
-	}, [isValid, navigate]);
 
 	const loginServiceProvider = async (
 		func: ILoginFunction,
@@ -51,23 +31,28 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
 		password: string
 	): Promise<IResponse> => {
 		const response = await func(username, password);
-		if (response.success) {
+		if (response.ok) {
 			setIsLoggedIn(true);
-			setIsValid(true);
 		}
-		return response;
+		const responseData = await response.json();
+		return responseData;
 	};
 
 	const backendServiceProvider = async (
 		func: IBackendInteraction
 	): Promise<IResponse> => {
-		return await func();
+		const response = await func();
+		if (response.status === 401) {
+			setIsLoggedIn(false);
+			navigate("/");
+		}
+		const responseData = await response.json();
+		return responseData;
 	};
+
 	return (
 		<AuthContext.Provider
 			value={{
-				isValid,
-				setIsValid,
 				isLoggedIn,
 				setIsLoggedIn,
 				loginServiceProvider,

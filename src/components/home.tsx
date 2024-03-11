@@ -2,13 +2,14 @@ import { useEffect, useState, useContext } from "react";
 import {
 	getStatusOffBackend,
 	hibernatePC,
-	logout,
 	startMongo,
 	stopMongo,
 	wakePC,
-} from "../services/switches";
+} from "../services/backendInteractions";
+
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../hooks/authContext";
+import { logout } from "../services/auth";
 
 const Home = () => {
 	const [mongoStatus, setMongoStatus] = useState(false);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getLogs } from "../services/switches";
+import { getLogs } from "../services/backendInteractions";
 
 const Logs = () => {
 	const [logs, setLogs] = useState("");
