@@ -1,21 +1,51 @@
-import { IBackendStatus, IResponse } from "../helpers/interfaces";
+import { IResponse } from "../helpers/interfaces";
 
-export const toggleMongo = async (): Promise<IResponse> => {
+export const startMongo = async (): Promise<IResponse> => {
 	try {
-		const response = await fetch("/api/users/toggleMongo", {
+		const response = await fetch("/api/users/startMongo", {
 			method: "POST",
 			credentials: "include",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				action: "toggle",
-			}),
 		});
-		const data = await response.json();
-		if (!response.ok) throw new Error(data.message);
-		else return { success: true, message: data.message };
+		const responseData = await response.json();
+		if (!response.ok) throw new Error(responseData.message);
+		else
+			return {
+				success: true,
+				message: responseData.message,
+				data: responseData.data,
+			};
 	} catch (error) {
 		console.error(error);
-		return { success: false, message: `Error ${error}` };
+		let errorMessage = "An error occurred";
+		if (error instanceof Error) {
+			errorMessage = error.message;
+		}
+		return { success: false, message: errorMessage, data: {} };
+	}
+};
+export const stopMongo = async (): Promise<IResponse> => {
+	try {
+		const response = await fetch("/api/users/stopMongo", {
+			method: "POST",
+			credentials: "include",
+			headers: { "Content-Type": "application/json" },
+		});
+		const responseData = await response.json();
+		if (!response.ok) throw new Error(responseData.message);
+		else
+			return {
+				success: true,
+				message: responseData.message,
+				data: responseData.data,
+			};
+	} catch (error) {
+		console.error(error);
+		let errorMessage = "An error occurred";
+		if (error instanceof Error) {
+			errorMessage = error.message;
+		}
+		return { success: false, message: errorMessage, data: {} };
 	}
 };
 export const hibernatePC = async (): Promise<IResponse> => {
@@ -24,33 +54,47 @@ export const hibernatePC = async (): Promise<IResponse> => {
 			method: "POST",
 			credentials: "include",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				action: "toggle",
-			}),
 		});
-		const data = await response.json();
-		if (!response.ok) throw new Error(data.message);
-		else return { success: true, message: "All good" };
+		const responseData = await response.json();
+		if (!response.ok) throw new Error(responseData.message);
+		else
+			return {
+				success: true,
+				message: responseData.message,
+				data: responseData.data,
+			};
 	} catch (error) {
 		console.error(error);
-		return { success: false, message: `Error ${error}` };
+		let errorMessage = "An error occurred";
+		if (error instanceof Error) {
+			errorMessage = error.message;
+		}
+		return { success: false, message: errorMessage, data: {} };
 	}
 };
 
-export const getStatusOffBackend = async (): Promise<IBackendStatus> => {
+export const getStatusOffBackend = async (): Promise<IResponse> => {
 	try {
 		const response = await fetch("api/users/getStatus", {
 			method: "GET",
 			credentials: "include",
 			headers: { "Content-Type": "application/json" },
 		});
-		if (!response.ok)
-			throw new Error(`HTTP error! status: ${response.status}`);
-		const data = await response.json();
-		return { success: true, mongoDB: data.mongo, mainPC: data.pc };
+		const responseData = await response.json();
+		if (!response.ok) throw new Error(responseData.message);
+		else
+			return {
+				success: true,
+				message: responseData.message,
+				data: responseData.data,
+			};
 	} catch (error) {
 		console.error(error);
-		return { success: false, errorMessage: `${error}` };
+		let errorMessage = "An error occurred";
+		if (error instanceof Error) {
+			errorMessage = error.message;
+		}
+		return { success: false, message: errorMessage, data: {} };
 	}
 };
 
@@ -61,15 +105,22 @@ export const getLogs = async (): Promise<IResponse> => {
 			credentials: "include",
 			headers: { "Content-Type": "application/json" },
 		});
-		if (!response.ok) {
-			throw new Error();
-		} else {
-			const data = await response.json();
-			return { success: true, message: data.logFile };
+		const responseData = await response.json();
+		if (!response.ok) throw new Error(responseData.message);
+		else {
+			return {
+				success: true,
+				message: responseData.message,
+				data: responseData.data,
+			};
 		}
 	} catch (error) {
 		console.error(error);
-		return { success: false, message: `${error}` };
+		let errorMessage = "An error occurred";
+		if (error instanceof Error) {
+			errorMessage = error.message;
+		}
+		return { success: false, message: errorMessage, data: {} };
 	}
 };
 
@@ -80,11 +131,21 @@ export const wakePC = async (): Promise<IResponse> => {
 			credentials: "include",
 			headers: { "Content-Type": "application/json" },
 		});
-		if (!response.ok) throw new Error();
-		else return { success: true, message: "Success!" };
+		const responseData = await response.json();
+		if (!response.ok) throw new Error(responseData.message);
+		else
+			return {
+				success: true,
+				message: responseData.message,
+				data: responseData.data,
+			};
 	} catch (error) {
 		console.error(error);
-		return { success: false, message: `${error}` };
+		let errorMessage = "An error occurred";
+		if (error instanceof Error) {
+			errorMessage = error.message;
+		}
+		return { success: false, message: errorMessage, data: {} };
 	}
 };
 export const logout = async (): Promise<IResponse> => {
@@ -94,10 +155,20 @@ export const logout = async (): Promise<IResponse> => {
 			credentials: "include",
 			headers: { "Content-Type": "application/json" },
 		});
-		if (!response.ok) throw new Error();
-		else return { success: true, message: "logged out" };
+		const responseData = await response.json();
+		if (!response.ok) throw new Error(responseData.message);
+		else
+			return {
+				success: true,
+				message: responseData.message,
+				data: responseData.data,
+			};
 	} catch (error) {
 		console.error(error);
-		return { success: false, message: `${error}` };
+		let errorMessage = "An error occurred";
+		if (error instanceof Error) {
+			errorMessage = error.message;
+		}
+		return { success: false, message: errorMessage, data: {} };
 	}
 };

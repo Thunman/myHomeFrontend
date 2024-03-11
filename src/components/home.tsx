@@ -1,42 +1,49 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
 	getStatusOffBackend,
 	hibernatePC,
 	logout,
-	toggleMongo,
+	startMongo,
+	stopMongo,
 	wakePC,
 } from "../services/switches";
 import { useNavigate } from "react-router-dom";
-import { ILoggedInState } from "../helpers/interfaces";
-import { useCookies } from "react-cookie";
+import { AuthContext } from "../hooks/authContext";
 
-const Home: React.FC<ILoggedInState> = (props) => {
+const Home = () => {
 	const [mongoStatus, setMongoStatus] = useState(false);
 	const [mainPCStatus, setMainPCStatus] = useState(false);
-	const [_, setCookie] = useCookies(["loggedIn"]);
+	const { backendServiceProvider, setIsLoggedIn } = useContext(AuthContext);
 	const navigate = useNavigate();
+
 	const handleSleepPC = async () => {
-		const response = await hibernatePC();
+		const response = await backendServiceProvider(hibernatePC);
 		if (response.success) {
 			alert(response.message);
 			setMainPCStatus(false);
 		} else alert(response.message);
 	};
 	const handleWakePC = async () => {
-		const response = await wakePC();
+		const response = await backendServiceProvider(wakePC);
 		if (response.success) {
 			alert(response.message);
 			setMainPCStatus(true);
 		} else alert(response.message);
 	};
-	const toggleDB = async () => {
-		const response = await toggleMongo();
-		if (response.success && response.message.includes("stopped")) {
-			alert(response.message);
-			setMongoStatus(false);
-		} else if (response.success && response.message.includes("started")) {
+	const startDB = async () => {
+		const response = await backendServiceProvider(startMongo);
+		if (response.success) {
 			alert(response.message);
 			setMongoStatus(true);
+		} else {
+			alert(response.message);
+		}
+	};
+	const stopDB = async () => {
+		const response = await backendServiceProvider(stopMongo);
+		if (response.success) {
+			alert(response.message);
+			setMongoStatus(false);
 		} else {
 			alert(response.message);
 		}
@@ -44,41 +51,36 @@ const Home: React.FC<ILoggedInState> = (props) => {
 
 	useEffect(() => {
 		const getStatus = async () => {
-			const response = await getStatusOffBackend();
+			const response = await backendServiceProvider(getStatusOffBackend);
 			if (response.success) {
-				setMainPCStatus(
-					response.mainPC !== undefined ? response.mainPC : false
-				);
-				setMongoStatus(
-					response.mongoDB !== undefined ? response.mongoDB : false
-				);
-			} else alert(response.errorMessage);
+				setMainPCStatus(response.data.mainPC);
+				setMongoStatus(response.data.mongo);
+			} else alert(response.message);
 		};
 		getStatus();
-	}, []);
+	}, [mongoStatus, mainPCStatus]);
 	const handleLogout = async () => {
-		const response = await logout();
-		if (response.success) {
-			props.setIsLoggedIn(false);
-			setCookie("loggedIn", false);
-			navigate("/");
-		} else alert(response.message);
+		const response = await backendServiceProvider(logout);
+		if (response.success) setIsLoggedIn(false);
 	};
 	return (
 		<div className=" bg-black w-screen h-screen flex justify-center items-center">
 			<div className="h-3/4screen w-3/4screen flex flex-wrap gap-4 place-content-center">
-				<div
-					onClick={toggleDB}
-					className={`hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white ${
-						mongoStatus ? "bg-neutral-400" : "bg-neutral-600"
-					}`}
-				>
-					{mongoStatus ? (
+				{mongoStatus ? (
+					<div
+						onClick={stopDB}
+						className="hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white bg-neutral-400"
+					>
 						<p className="text-white font-semibold">Mongo online</p>
-					) : (
+					</div>
+				) : (
+					<div
+						onClick={startDB}
+						className="hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white bg-neutral-600"
+					>
 						<p className="text-white font-semibold">Mongo offline</p>
-					)}
-				</div>
+					</div>
+				)}
 				<div className="bg-neutral-600 hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white">
 					<p className="text-white font-semibold">Emby</p>
 				</div>

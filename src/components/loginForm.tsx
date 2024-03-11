@@ -1,16 +1,15 @@
-import React, { useState } from "react";
-import { login } from "../services/auth";
-import { ILoggedInState } from "../helpers/interfaces";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
-const LoginForm: React.FC<ILoggedInState> = (props) => {
+import { AuthContext } from "../hooks/authContext";
+import { login } from "../services/auth";
+const LoginForm = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const { loginServiceProvider } = useContext(AuthContext);
 	const navigate = useNavigate();
 	const handleClick = async () => {
-		const response = await login(username, password);
+		const response = await loginServiceProvider(login, username, password);
 		if (response.success) {
-			props.setIsLoggedIn(true);
 			navigate("/home");
 		} else alert(response.message);
 	};

@@ -5,7 +5,7 @@ const Logs = () => {
 	const [logs, setLogs] = useState("");
 	useEffect(() => {
 		const getData = async () => {
-			setLogs((await getLogs()).message);
+			setLogs((await getLogs()).jsonObj);
 		};
 		getData();
 	}, []);

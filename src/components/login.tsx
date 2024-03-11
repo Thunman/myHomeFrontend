@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import LoginForm from "./loginForm";
-import { ILoggedInState } from "../helpers/interfaces";
 
 const randomSymbols = () => {
 	const symbols =
@@ -13,7 +12,7 @@ const randomSymbols = () => {
 	return randomString;
 };
 
-const Login: React.FC<ILoggedInState> = (props) => {
+const Login = () => {
 	const [position, setPosition] = useState({ left: 0, top: 0 });
 	const [cryptString, setCryptString] = useState("");
 	useEffect(() => {
@@ -44,7 +43,7 @@ const Login: React.FC<ILoggedInState> = (props) => {
 				</div>
 			</div>
 			<div className="absolute inset-0 flex items-center justify-center z-10">
-				<LoginForm setIsLoggedIn={props.setIsLoggedIn} />
+				<LoginForm />
 			</div>
 		</>
 	);
