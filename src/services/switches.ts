@@ -72,3 +72,32 @@ export const getLogs = async (): Promise<IResponse> => {
 		return { success: false, message: `${error}` };
 	}
 };
+
+export const wakePC = async (): Promise<IResponse> => {
+	try {
+		const response = await fetch("/api/users/wakePC", {
+			method: "POST",
+			credentials: "include",
+			headers: { "Content-Type": "application/json" },
+		});
+		if (!response.ok) throw new Error();
+		else return { success: true, message: "Success!" };
+	} catch (error) {
+		console.error(error);
+		return { success: false, message: `${error}` };
+	}
+};
+export const logout = async (): Promise<IResponse> => {
+	try {
+		const response = await fetch("/api/users/logout", {
+			method: "POST",
+			credentials: "include",
+			headers: { "Content-Type": "application/json" },
+		});
+		if (!response.ok) throw new Error();
+		else return { success: true, message: "logged out" };
+	} catch (error) {
+		console.error(error);
+		return { success: false, message: `${error}` };
+	}
+};
