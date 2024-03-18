@@ -6,7 +6,6 @@ import {
 	stopMongo,
 	wakePC,
 } from "../services/backendInteractions";
-
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../hooks/authContext";
 import { logout } from "../services/auth";
@@ -16,7 +15,10 @@ const Home = () => {
 	const [mainPCStatus, setMainPCStatus] = useState(false);
 	const { backendServiceProvider, setIsLoggedIn } = useContext(AuthContext);
 	const navigate = useNavigate();
-
+	const { isLoggedIn } = useContext(AuthContext);
+	useEffect(() => {
+		if (!isLoggedIn) navigate("/");
+	}, [isLoggedIn]);
 	const handleSleepPC = async () => {
 		const response = await backendServiceProvider(hibernatePC);
 		if (response.success) {
@@ -54,7 +56,7 @@ const Home = () => {
 		const getStatus = async () => {
 			const response = await backendServiceProvider(getStatusOffBackend);
 			if (response.success) {
-				setMainPCStatus(response.data.mainPC);
+				setMainPCStatus(response.data.pc);
 				setMongoStatus(response.data.mongo);
 			} else alert(response.message);
 		};
@@ -110,7 +112,12 @@ const Home = () => {
 				>
 					<p className="text-white font-semibold">Logs</p>
 				</div>
-				<div className="bg-neutral-600 hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white"></div>
+				<div
+					onClick={() => navigate("/diskStatus")}
+					className="bg-neutral-600 hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white"
+				>
+					<p className="text-white font-semibold">Disk Status</p>
+				</div>
 				<div className="bg-neutral-600 hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white"></div>
 				<div className="bg-neutral-600 hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white"></div>
 				<div className="bg-neutral-600 hover:bg-neutral-300 flex items-center justify-center h-32 w-1/4 transition duration-200 rounded-lg ring-2 ring-white"></div>

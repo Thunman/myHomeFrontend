@@ -45,3 +45,10 @@ export const wakePC = async () => {
 		headers: { "Content-Type": "application/json" },
 	});
 };
+export const getDiskStatus = async () => {
+	return fetch("/api/users/getDiskStatus", {
+		method: "GET",
+		credentials: "include",
+		headers: { "Content-Type": "application/json" },
+	});
+};

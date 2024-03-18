@@ -10,8 +10,12 @@ const LoginForm = () => {
 	const handleClick = async () => {
 		const response = await loginServiceProvider(login, username, password);
 		if (response.success) {
+			console.log("loginSuccess ", response.success);
 			navigate("/home");
-		} else alert(response.message);
+		} else {
+			console.log("loginFail", response.success);
+			alert(response.message);
+		}
 	};
 
 	return (

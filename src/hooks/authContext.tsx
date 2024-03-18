@@ -6,7 +6,6 @@ import {
 	ILoginFunction,
 	IResponse,
 } from "../helpers/interfaces";
-import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 export const AuthContext = createContext<IAuthContext>({
@@ -23,7 +22,6 @@ export const AuthContext = createContext<IAuthContext>({
 export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
 	const [cookies] = useCookies(["loggedIn"]);
 	const [isLoggedIn, setIsLoggedIn] = useState(cookies.loggedIn);
-	const navigate = useNavigate();
 
 	const loginServiceProvider = async (
 		func: ILoginFunction,
@@ -35,6 +33,7 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
 			setIsLoggedIn(true);
 		}
 		const responseData = await response.json();
+		console.log("responseData: ", responseData);
 		return responseData;
 	};
 
@@ -44,7 +43,6 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
 		const response = await func();
 		if (response.status === 401) {
 			setIsLoggedIn(false);
-			navigate("/");
 		}
 		const responseData = await response.json();
 		return responseData;
